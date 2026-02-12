@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 情绪能量测试</title>
+<style>
+body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:linear-gradient(to bottom,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+    overflow:hidden;
+}
+.container{width:90%;max-width:420px;position:relative;z-index:2;}
+button{
+    display:block;
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:1px solid rgba(255,255,255,0.6);
+    background:rgba(255,255,255,0.05);
+    color:#fff;
+    font-size:16px;
+}
+.hidden{display:none;}
+.fade{opacity:0;transition:opacity 1s;}
+.show{opacity:1;}
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1;
+}
+small{opacity:0.7;}
+</style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+
+<div class="container" id="q1">
+<h2>2026 情绪能量测试</h2>
+<small>用三个选择，看一看你的新年能量</small>
+<p>第一题</p >
+<p>2026年的第一天，你更想看到：</p >
+<button onclick="next('q2')">🌊 海边的日出</button>
+<button onclick="next('q2')">🌃 城市夜景</button>
+<button onclick="next('q2')">🌿 山顶的风</button>
+</div>
+
+<div class="container hidden" id="q2">
+<p>第二题</p >
+<p>如果新的一年有一个关键词，你更希望是：</p >
+<button onclick="next('q3')">松弛</button>
+<button onclick="next('q3')">热烈</button>
+<button onclick="next('q3')">自由</button>
+</div>
+
+<div class="container hidden" id="q3">
+<p>第三题</p >
+<p>当有人认真看着你时，你更希望：</p >
+<button onclick="showResult()">被理解</button>
+<button onclick="showResult()">被偏爱</button>
+<button onclick="showResult()">被欣赏</button>
+</div>
+
+<div class="container hidden" id="result">
+<p id="r1" class="fade">分析完成。</p >
+<p id="r2" class="fade">你的类型是——</p >
+<p id="r3" class="fade">值得被认真对待型。</p >
+<p id="r4" class="fade">2026年，会有人想慢慢了解你。</p >
+<p id="r5" class="fade">愿你在新的一年事事顺心！</p >
+<p id="r6" class="fade">许馨月 新年快乐！</p >
+</div>
+
+<script>
+function next(id){
+    document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+function showResult(){
+    document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));
+    let res=document.getElementById('result');
+    res.classList.remove('hidden');
+    let lines=["r1","r2","r3","r4","r5","r6"];
+    lines.forEach((id,i)=>{
+        setTimeout(()=>{
+            document.getElementById(id).classList.add('show');
+        },800*i);
+    });
+}
+
+/* 微雪效果 */
+let canvas=document.getElementById("snow");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let snowflakes=[];
+for(let i=0;i<80;i++){
+    snowflakes.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*3+1,
+        d:Math.random()*1
+    });
+}
+function drawSnow(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="rgba(255,255,255,0.8)";
+    ctx.beginPath();
+    for(let i=0;i<snowflakes.length;i++){
+        let s=snowflakes[i];
+        ctx.moveTo(s.x,s.y);
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2,true);
+    }
+    ctx.fill();
+    moveSnow();
+}
+let angle=0;
+function moveSnow(){
+    angle+=0.01;
+    for(let i=0;i<snowflakes.length;i++){
+        let s=snowflakes[i];
+        s.y+=Math.pow(s.d,2)+1;
+        s.x+=Math.sin(angle)*0.5;
+        if(s.y>canvas.height){
+            s.y=0;
+            s.x=Math.random()*canvas.width;
+        }
+    }
+}
+setInterval(drawSnow,33);
+</script>
+
+</body>
+</html>
